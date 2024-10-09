@@ -34,7 +34,9 @@ const socket_io_1 = require("socket.io");
 const http_1 = require("http");
 const data_1 = require("./data");
 const helpers_1 = require("./helpers");
+const types_1 = require("./types");
 dotenv.config();
+const MINUTE_IN_MILISECONDS = 60000;
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const PORT = process.env.PORT ?? 3000;
@@ -59,7 +61,8 @@ const io = new socket_io_1.Server(server, {
 });
 io.on('connection', socket => {
     console.log(`⚡: ${socket.id} user just connected!`);
-    io.emit('map_items', data_1.MOCK_LOCATIONS);
+    io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, data_1.MOCK_LOCATIONS);
+    // imitation of moving items
     const newMockLoations = data_1.MOCK_LOCATIONS.map(item => ({
         ...item,
         coords: {
@@ -67,18 +70,22 @@ io.on('connection', socket => {
             lat: item.coords.lat + (0, helpers_1.getRandomNumber)(0.001, 0.005),
         },
     }));
+    // imitation of moving items
     setTimeout(() => {
-        io.emit('map_items', newMockLoations);
-    }, 2000);
+        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    }, 4 * MINUTE_IN_MILISECONDS);
+    // imitation of deleting items
     setTimeout(() => {
-        io.emit('map_items', newMockLoations.slice(20));
-    }, 4000);
+        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
+    }, 8 * MINUTE_IN_MILISECONDS);
+    // imitation of deleting items
     setTimeout(() => {
-        io.emit('map_items', newMockLoations.slice(40));
-    }, 6000);
+        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
+    }, 12 * MINUTE_IN_MILISECONDS);
+    // imitation of appearing items
     setTimeout(() => {
-        io.emit('map_items', newMockLoations);
-    }, 8000);
+        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    }, 16 * MINUTE_IN_MILISECONDS);
     socket.on('disconnect', () => {
         console.log('🔥: A user disconnected');
     });

@@ -10,6 +10,8 @@ import { SOCKET_EVENTS } from './types';
 
 dotenv.config();
 
+const MINUTE_IN_MILISECONDS = 60000;
+
 const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT ?? 3000;
@@ -58,22 +60,22 @@ io.on('connection', socket => {
   // imitation of moving items
   setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
-  }, 2000);
+  }, 4 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
   setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
-  }, 4000);
+  }, 8 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
   setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
-  }, 6000);
+  }, 12 * MINUTE_IN_MILISECONDS);
 
   // imitation of appearing items
   setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
-  }, 8000);
+  }, 16 * MINUTE_IN_MILISECONDS);
 
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected');
