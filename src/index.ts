@@ -43,10 +43,12 @@ const io = new Server(server, {
   },
 });
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
   console.log(`⚡: ${socket.id} user just connected!`);
 
-  io.emit(SOCKET_EVENTS.MAP_ITEMS, MOCK_LOCATIONS);
+  await socket.join(socket.id);
+
+  io.to(socket.id).emit(SOCKET_EVENTS.MAP_ITEMS, MOCK_LOCATIONS);
 
   // imitation of moving items
   const newMockLoations = MOCK_LOCATIONS.map(item => ({
@@ -59,22 +61,22 @@ io.on('connection', socket => {
 
   // imitation of moving items
   const timeout1 = setTimeout(() => {
-    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    io.to(socket.id).emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 4 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
   const timeout2 = setTimeout(() => {
-    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
+    io.to(socket.id).emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
   }, 8 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
   const timeout3 = setTimeout(() => {
-    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
+    io.to(socket.id).emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
   }, 12 * MINUTE_IN_MILISECONDS);
 
   // imitation of appearing items
   const timeout4 = setTimeout(() => {
-    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    io.to(socket.id).emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 16 * MINUTE_IN_MILISECONDS);
 
   socket.on('disconnect', () => {

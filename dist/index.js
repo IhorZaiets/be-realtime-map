@@ -59,9 +59,10 @@ const io = new socket_io_1.Server(server, {
         origin: 'http://localhost:5173',
     },
 });
-io.on('connection', socket => {
+io.on('connection', async (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
-    io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, data_1.MOCK_LOCATIONS);
+    await socket.join(socket.id);
+    io.to(socket.id).emit(types_1.SOCKET_EVENTS.MAP_ITEMS, data_1.MOCK_LOCATIONS);
     // imitation of moving items
     const newMockLoations = data_1.MOCK_LOCATIONS.map(item => ({
         ...item,
@@ -72,21 +73,22 @@ io.on('connection', socket => {
     }));
     // imitation of moving items
     const timeout1 = setTimeout(() => {
-        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
-    }, 0.1 * MINUTE_IN_MILISECONDS);
+        io.to(socket.id).emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    }, 4 * MINUTE_IN_MILISECONDS);
     // imitation of deleting items
     const timeout2 = setTimeout(() => {
-        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
-    }, 0.2 * MINUTE_IN_MILISECONDS);
+        io.to(socket.id).emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
+    }, 8 * MINUTE_IN_MILISECONDS);
     // imitation of deleting items
     const timeout3 = setTimeout(() => {
-        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
-    }, 0.3 * MINUTE_IN_MILISECONDS);
+        io.to(socket.id).emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
+    }, 12 * MINUTE_IN_MILISECONDS);
     // imitation of appearing items
     const timeout4 = setTimeout(() => {
-        io.emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
-    }, 0.4 * MINUTE_IN_MILISECONDS);
+        io.to(socket.id).emit(types_1.SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
+    }, 16 * MINUTE_IN_MILISECONDS);
     socket.on('disconnect', () => {
+        // we need to clear timeouts in order not to send events after
         clearTimeout(timeout1);
         clearTimeout(timeout2);
         clearTimeout(timeout3);
