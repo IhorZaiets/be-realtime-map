@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { MOCK_LOCATIONS } from './data';
 import { getRandomNumber } from './helpers';
+import { SOCKET_EVENTS } from './types';
 
 dotenv.config();
 
@@ -43,7 +44,7 @@ const io = new Server(server, {
 io.on('connection', socket => {
   console.log(`⚡: ${socket.id} user just connected!`);
 
-  io.emit('map_items', MOCK_LOCATIONS);
+  io.emit(SOCKET_EVENTS.MAP_ITEMS, MOCK_LOCATIONS);
 
   // imitation of moving items
   const newMockLoations = MOCK_LOCATIONS.map(item => ({
@@ -56,22 +57,22 @@ io.on('connection', socket => {
 
   // imitation of moving items
   setTimeout(() => {
-    io.emit('map_items', newMockLoations);
+    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 2000);
 
   // imitation of deleting items
   setTimeout(() => {
-    io.emit('map_items', newMockLoations.slice(20));
+    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
   }, 4000);
 
   // imitation of deleting items
   setTimeout(() => {
-    io.emit('map_items', newMockLoations.slice(40));
+    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
   }, 6000);
 
   // imitation of appearing items
   setTimeout(() => {
-    io.emit('map_items', newMockLoations);
+    io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 8000);
 
   socket.on('disconnect', () => {
