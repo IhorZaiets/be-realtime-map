@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { MOCK_EMAIL, MOCK_PASSWORD } from '../data';
 
-export const loginUser = (
+const loginUser = (
   req: Request<unknown, unknown, { email: string; password: string }>,
   res: Response
 ) => {
@@ -15,3 +15,5 @@ export const loginUser = (
 
   res.status(401).json('User does not exist');
 };
+
+export default { loginUser };

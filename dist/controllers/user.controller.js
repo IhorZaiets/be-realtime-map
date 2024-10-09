@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = void 0;
 const data_1 = require("../data");
 const loginUser = (req, res) => {
     const { email, password } = req.body;
@@ -10,5 +9,5 @@ const loginUser = (req, res) => {
     }
     res.status(401).json('User does not exist');
 };
-exports.loginUser = loginUser;
+exports.default = { loginUser };
 //# sourceMappingURL=user.controller.js.map

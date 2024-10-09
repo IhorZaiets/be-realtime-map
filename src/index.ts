@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-import userRouter from './routes/user.router';
+import { userRouter } from './routes';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { MOCK_LOCATIONS } from './data';
+import { getRandomNumber } from './helpers';
 
 dotenv.config();
 
@@ -44,17 +45,34 @@ io.on('connection', socket => {
 
   io.emit('map_items', MOCK_LOCATIONS);
 
+  // imitation of moving items
+  const newMockLoations = MOCK_LOCATIONS.map(item => ({
+    ...item,
+    coords: {
+      lng: item.coords.lng + getRandomNumber(0.001, 0.005),
+      lat: item.coords.lat + getRandomNumber(0.001, 0.005),
+    },
+  }));
+
+  // imitation of moving items
   setTimeout(() => {
-    io.emit('map_items', MOCK_LOCATIONS.slice(3));
+    io.emit('map_items', newMockLoations);
   }, 2000);
 
+  // imitation of deleting items
   setTimeout(() => {
-    io.emit('map_items', MOCK_LOCATIONS.slice(6));
+    io.emit('map_items', newMockLoations.slice(20));
   }, 4000);
 
+  // imitation of deleting items
   setTimeout(() => {
-    io.emit('map_items', MOCK_LOCATIONS);
+    io.emit('map_items', newMockLoations.slice(40));
   }, 6000);
+
+  // imitation of appearing items
+  setTimeout(() => {
+    io.emit('map_items', newMockLoations);
+  }, 8000);
 
   socket.on('disconnect', () => {
     console.log('🔥: A user disconnected');
