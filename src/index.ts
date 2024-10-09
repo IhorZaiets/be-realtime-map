@@ -58,26 +58,31 @@ io.on('connection', socket => {
   }));
 
   // imitation of moving items
-  setTimeout(() => {
+  const timeout1 = setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 4 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
-  setTimeout(() => {
+  const timeout2 = setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(20));
   }, 8 * MINUTE_IN_MILISECONDS);
 
   // imitation of deleting items
-  setTimeout(() => {
+  const timeout3 = setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations.slice(40));
   }, 12 * MINUTE_IN_MILISECONDS);
 
   // imitation of appearing items
-  setTimeout(() => {
+  const timeout4 = setTimeout(() => {
     io.emit(SOCKET_EVENTS.MAP_ITEMS, newMockLoations);
   }, 16 * MINUTE_IN_MILISECONDS);
 
   socket.on('disconnect', () => {
+    // we need to clear timeouts in order not to send events after
+    clearTimeout(timeout1);
+    clearTimeout(timeout2);
+    clearTimeout(timeout3);
+    clearTimeout(timeout4);
     console.log('🔥: A user disconnected');
   });
 });
