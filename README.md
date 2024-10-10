@@ -1,6 +1,6 @@
 # Realtime map
 
-This is mock server for [web-realtime-map]([https://pages.github.com/](https://github.com/IhorZaiets/web-realtime-map)).
+This is mock server for [web-realtime-map](https://github.com/IhorZaiets/web-realtime-map).
 
 This server uses such technologies as:
 - typescript
