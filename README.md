@@ -12,5 +12,5 @@ In order to run this server, you will need:
 ```
 npm i - to install dependencies
 npm run build - to make sure that the created dist folder is up to date
-npm run dev - start development server
+npm run start - start development server
 ```
